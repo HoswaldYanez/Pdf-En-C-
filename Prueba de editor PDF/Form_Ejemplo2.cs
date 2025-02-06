@@ -42,6 +42,51 @@ namespace Prueba_de_editor_PDF
             productos.Rows.Add(2, "Producto 1", 10.50m, 21.00m);
             productos.Rows.Add(1, "Producto 2", 20.00m, 20.00m);
             productos.Rows.Add(3, "Producto 3", 15.75m, 47.25m);
+            productos.Rows.Add(2, "Producto 1", 10.50m, 21.00m);
+            productos.Rows.Add(1, "Producto 2", 20.00m, 20.00m);
+            productos.Rows.Add(3, "Producto 3", 15.75m, 47.25m);
+            productos.Rows.Add(2, "Producto 1", 10.50m, 21.00m);
+            productos.Rows.Add(1, "Producto 2", 20.00m, 20.00m);
+            productos.Rows.Add(3, "Producto 3", 15.75m, 47.25m);
+            productos.Rows.Add(2, "Producto 1", 10.50m, 21.00m);
+            productos.Rows.Add(1, "Producto 2", 20.00m, 20.00m);
+            productos.Rows.Add(3, "Producto 3", 15.75m, 47.25m);
+            productos.Rows.Add(2, "Producto 1", 10.50m, 21.00m);
+            productos.Rows.Add(1, "Producto 2", 20.00m, 20.00m);
+            productos.Rows.Add(3, "Producto 3", 15.75m, 47.25m);
+            productos.Rows.Add(2, "Producto 1", 10.50m, 21.00m);
+            productos.Rows.Add(1, "Producto 2", 20.00m, 20.00m);
+            productos.Rows.Add(3, "Producto 3", 15.75m, 47.25m);
+            productos.Rows.Add(2, "Producto 1", 10.50m, 21.00m);
+            productos.Rows.Add(1, "Producto 2", 20.00m, 20.00m);
+            productos.Rows.Add(3, "Producto 3", 15.75m, 47.25m);
+            productos.Rows.Add(2, "Producto 1", 10.50m, 21.00m);
+            productos.Rows.Add(1, "Producto 2", 20.00m, 20.00m);
+            productos.Rows.Add(3, "Producto 3", 15.75m, 47.25m);
+            productos.Rows.Add(2, "Producto 1", 10.50m, 21.00m);
+            productos.Rows.Add(1, "Producto 2", 20.00m, 20.00m);
+            productos.Rows.Add(3, "Producto 3", 15.75m, 47.25m);
+            productos.Rows.Add(2, "Producto 1", 10.50m, 21.00m);
+            productos.Rows.Add(1, "Producto 2", 20.00m, 20.00m);
+            productos.Rows.Add(3, "Producto 3", 15.75m, 47.25m);
+            productos.Rows.Add(2, "Producto 1", 10.50m, 21.00m);
+            productos.Rows.Add(1, "Producto 2", 20.00m, 20.00m);
+            productos.Rows.Add(3, "Producto 3", 15.75m, 47.25m);
+            productos.Rows.Add(2, "Producto 1", 10.50m, 21.00m);
+            productos.Rows.Add(1, "Producto 2", 20.00m, 20.00m);
+            productos.Rows.Add(3, "Producto 3", 15.75m, 47.25m);
+            productos.Rows.Add(2, "Producto 1", 10.50m, 21.00m);
+            productos.Rows.Add(1, "Producto 2", 20.00m, 20.00m);
+            productos.Rows.Add(3, "Producto 3", 15.75m, 47.25m);
+            productos.Rows.Add(2, "Producto 1", 10.50m, 21.00m);
+            productos.Rows.Add(1, "Producto 2", 20.00m, 20.00m);
+            productos.Rows.Add(3, "Producto 3", 15.75m, 47.25m);
+            productos.Rows.Add(2, "Producto 1", 10.50m, 21.00m);
+            productos.Rows.Add(1, "Producto 2", 20.00m, 20.00m);
+            productos.Rows.Add(3, "Producto 3", 15.75m, 47.25m);
+            productos.Rows.Add(2, "Producto 1", 10.50m, 21.00m);
+            productos.Rows.Add(1, "Producto 2", 20.00m, 20.00m);
+            productos.Rows.Add(3, "Producto 3", 15.75m, 47.25m);
 
             dataGridViewProductos.DataSource = productos;
             dataGridViewProductos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -307,8 +352,27 @@ namespace Prueba_de_editor_PDF
 
             // Filas de productos
             decimal total = 0;
+            int maxRowsPerPage = 27; // Ajusta este valor según el espacio disponible en la página
+            int currentRowCount = 0;
+
             foreach (DataGridViewRow row in dataGridViewProductos.SelectedRows)
             {
+                if (currentRowCount >= maxRowsPerPage)
+                {
+                    // Agregar la tabla actual al documento
+                    doc.Add(detallesTable);
+
+                    // Crear una nueva página
+                    doc.NewPage();
+
+                    // Reiniciar la tabla de detalles
+                    detallesTable = new PdfPTable(4);
+                    detallesTable.WidthPercentage = 100;
+                    detallesTable.SetWidths(new float[] { 1, 3, 1, 1 });
+
+                    currentRowCount = 0;
+                }
+
                 int cantidad = Convert.ToInt32(row.Cells["Cantidad"].Value);
                 string descripcion = row.Cells["Descripcion"].Value.ToString();
                 decimal precioUnitario = Convert.ToDecimal(row.Cells["PrecioUnitario"].Value);
@@ -320,41 +384,52 @@ namespace Prueba_de_editor_PDF
                 detallesTable.AddCell(new PdfPCell(new Phrase(importe.ToString("N2"), normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, FixedHeight = 18f, Border = iTextSharp.text.Rectangle.TOP_BORDER | iTextSharp.text.Rectangle.BOTTOM_BORDER, BorderColor = new BaseColor(188, 188, 188) });
 
                 total += importe;
+                currentRowCount++;
             }
 
-            // Total
-            detallesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
-            detallesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
-            detallesTable.AddCell(new PdfPCell(new Phrase("Sub Total", normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = iTextSharp.text.Rectangle.NO_BORDER });
-            detallesTable.AddCell(new PdfPCell(new Phrase(total.ToString("N2"), normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, FixedHeight = 18f, Border = iTextSharp.text.Rectangle.TOP_BORDER | iTextSharp.text.Rectangle.BOTTOM_BORDER, BorderColor = new BaseColor(188, 188, 188) });
-
-            detallesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
-            detallesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
-            detallesTable.AddCell(new PdfPCell(new Phrase("Monto Base Imponible", normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = iTextSharp.text.Rectangle.NO_BORDER });
-            detallesTable.AddCell(new PdfPCell(new Phrase(total.ToString("N2"), normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, FixedHeight = 18f, Border = iTextSharp.text.Rectangle.TOP_BORDER | iTextSharp.text.Rectangle.BOTTOM_BORDER, BorderColor = new BaseColor(188, 188, 188) });
-
-            detallesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
-            detallesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
-            detallesTable.AddCell(new PdfPCell(new Phrase("Monto IVA", normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = iTextSharp.text.Rectangle.NO_BORDER });
-            detallesTable.AddCell(new PdfPCell(new Phrase(total.ToString("N2"), normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, FixedHeight = 18f, Border = iTextSharp.text.Rectangle.TOP_BORDER | iTextSharp.text.Rectangle.BOTTOM_BORDER, BorderColor = new BaseColor(188, 188, 188) });
-
-            detallesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
-            detallesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
-            detallesTable.AddCell(new PdfPCell(new Phrase("Monto Exento", normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = iTextSharp.text.Rectangle.NO_BORDER });
-            detallesTable.AddCell(new PdfPCell(new Phrase(total.ToString("N2"), normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, FixedHeight = 18f, Border = iTextSharp.text.Rectangle.TOP_BORDER | iTextSharp.text.Rectangle.BOTTOM_BORDER, BorderColor = new BaseColor(188, 188, 188) });
-
-
-            detallesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
-            detallesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
-            detallesTable.AddCell(new PdfPCell(new Phrase("Monto Base IGTF", normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = iTextSharp.text.Rectangle.NO_BORDER });
-            detallesTable.AddCell(new PdfPCell(new Phrase(total.ToString("N2"), normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, FixedHeight = 18f, Border = iTextSharp.text.Rectangle.TOP_BORDER | iTextSharp.text.Rectangle.BOTTOM_BORDER, BorderColor = new BaseColor(188, 188, 188) });
-
-            detallesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
-            detallesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
-            detallesTable.AddCell(new PdfPCell(new Phrase("Total a pagar", normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = iTextSharp.text.Rectangle.NO_BORDER });
-            detallesTable.AddCell(new PdfPCell(new Phrase(total.ToString("N2"), BlacaFont)) { BackgroundColor = new BaseColor(0, 167, 255), HorizontalAlignment = Element.ALIGN_RIGHT, FixedHeight = 18f, Border = iTextSharp.text.Rectangle.TOP_BORDER | iTextSharp.text.Rectangle.BOTTOM_BORDER, BorderColor = new BaseColor(188, 188, 188) });
-
+            // Agregar la tabla actual al documento
             doc.Add(detallesTable);
+
+            // Agregar los totales en la última página
+            PdfPTable totalesTable = new PdfPTable(4);
+            totalesTable.WidthPercentage = 100;
+            totalesTable.SetWidths(new float[] { 1, 2, 2, 1 });
+
+            // Total
+            totalesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
+            totalesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
+            totalesTable.AddCell(new PdfPCell(new Phrase("Sub Total", normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = iTextSharp.text.Rectangle.NO_BORDER });
+            totalesTable.AddCell(new PdfPCell(new Phrase(total.ToString("N2"), normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, FixedHeight = 18f, Border = iTextSharp.text.Rectangle.TOP_BORDER | iTextSharp.text.Rectangle.BOTTOM_BORDER, BorderColor = new BaseColor(188, 188, 188) });
+
+            totalesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
+            totalesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
+            totalesTable.AddCell(new PdfPCell(new Phrase("Monto Base Imponible", normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = iTextSharp.text.Rectangle.NO_BORDER });
+            totalesTable.AddCell(new PdfPCell(new Phrase(total.ToString("N2"), normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, FixedHeight = 18f, Border = iTextSharp.text.Rectangle.TOP_BORDER | iTextSharp.text.Rectangle.BOTTOM_BORDER, BorderColor = new BaseColor(188, 188, 188) });
+
+            totalesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
+            totalesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
+            totalesTable.AddCell(new PdfPCell(new Phrase("Monto IVA", normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = iTextSharp.text.Rectangle.NO_BORDER });
+            totalesTable.AddCell(new PdfPCell(new Phrase(total.ToString("N2"), normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, FixedHeight = 18f, Border = iTextSharp.text.Rectangle.TOP_BORDER | iTextSharp.text.Rectangle.BOTTOM_BORDER, BorderColor = new BaseColor(188, 188, 188) });
+
+            totalesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
+            totalesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
+            totalesTable.AddCell(new PdfPCell(new Phrase("Monto Exento", normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = iTextSharp.text.Rectangle.NO_BORDER });
+            totalesTable.AddCell(new PdfPCell(new Phrase(total.ToString("N2"), normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, FixedHeight = 18f, Border = iTextSharp.text.Rectangle.TOP_BORDER | iTextSharp.text.Rectangle.BOTTOM_BORDER, BorderColor = new BaseColor(188, 188, 188) });
+
+
+            totalesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
+            totalesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
+            totalesTable.AddCell(new PdfPCell(new Phrase("Monto Base IGTF", normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = iTextSharp.text.Rectangle.NO_BORDER });
+            totalesTable.AddCell(new PdfPCell(new Phrase(total.ToString("N2"), normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, FixedHeight = 18f, Border = iTextSharp.text.Rectangle.TOP_BORDER | iTextSharp.text.Rectangle.BOTTOM_BORDER, BorderColor = new BaseColor(188, 188, 188) });
+
+            totalesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
+            totalesTable.AddCell(new PdfPCell(new Phrase(" ")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
+            totalesTable.AddCell(new PdfPCell(new Phrase("Total a pagar", normalFont)) { HorizontalAlignment = Element.ALIGN_RIGHT, Border = iTextSharp.text.Rectangle.NO_BORDER });
+            totalesTable.AddCell(new PdfPCell(new Phrase(total.ToString("N2"), BlacaFont)) { BackgroundColor = new BaseColor(0, 167, 255), HorizontalAlignment = Element.ALIGN_RIGHT, FixedHeight = 18f, Border = iTextSharp.text.Rectangle.TOP_BORDER | iTextSharp.text.Rectangle.BOTTOM_BORDER, BorderColor = new BaseColor(188, 188, 188) });
+
+            // Agregar más filas de totales si es necesario...
+
+            doc.Add(totalesTable);
 
             // Cerrar el documento
             doc.Close();
